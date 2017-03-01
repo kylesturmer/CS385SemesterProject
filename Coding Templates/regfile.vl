@@ -11,7 +11,7 @@ module reg_file (rr1,rr2,wr,wd,regwrite,rd1,rd2,clock);
    input wd;
    input regwrite,clock;
    output rd1,rd2;
-
+   wire c0, c1, c2, c3,w0 , w1, w2, w3, regwrite_and_clock;
 // registers
 
    D_flip_flop r1 (wd,c1,q1);
