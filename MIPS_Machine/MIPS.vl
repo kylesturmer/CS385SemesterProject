@@ -8,21 +8,24 @@
 module reg_file (rr1,rr2,wr,wd,regwrite,rd1,rd2,clock);
 
    input [1:0] rr1,rr2,wr;
-   input wd;
+   input [15:0] wd;
    input regwrite,clock;
-   output [15:0] rd1,rd2;
+   output [15:0] rd1,rd2, q1, q2, q3;
    wire c1, c2, c3,w0 , w1, w2, w3, regwrite_and_clock;
 
 // registers
 
-   D_flip_flop r1 (wd,c1,q1);
-   D_flip_flop r2 (wd,c2,q2);
-   D_flip_flop r3 (wd,c3,q3);
+   register r1 (wd,c1,q1);
+   register r2 (wd,c2,q2);
+   register r3 (wd,c3,q3);
 
 // output port
 
-   mux4x1 mux1 (0,q1,q2,q3,rr1,rd1),
-          mux2 (0,q1,q2,q3,rr2,rd2);
+   // mux4x1 mux1 (0,q1,q2,q3,rr1,rd1),
+        //   mux2 (0,q1,q2,q3,rr2,rd2);
+  mux4x1_16 mux1 (16'b0000000000000000,q1,q2,q3,rr1,rd1),
+            mux2 (16'b0000000000000000,q1,q2,q3,rr2,rd2);
+
 
 // input port
 
@@ -37,6 +40,28 @@ module reg_file (rr1,rr2,wr,wd,regwrite,rd1,rd2,clock);
 endmodule
 
 // Components
+
+module register(WriteData,CLK, ReadData);
+   input [15:0] WriteData;
+   input CLK;
+   output [15:0] ReadData;
+   D_flip_flop r0(WriteData[0], CLK, ReadData[0]);
+   D_flip_flop r1(WriteData[1], CLK, ReadData[1]);
+   D_flip_flop r2(WriteData[2], CLK, ReadData[2]);
+   D_flip_flop r3(WriteData[3], CLK, ReadData[3]);
+   D_flip_flop r4(WriteData[4], CLK, ReadData[4]);
+   D_flip_flop r5(WriteData[5], CLK, ReadData[5]);
+   D_flip_flop r6(WriteData[6], CLK, ReadData[6]);
+   D_flip_flop r7(WriteData[7], CLK, ReadData[7]);
+   D_flip_flop r8(WriteData[8], CLK, ReadData[8]);
+   D_flip_flop r9(WriteData[9], CLK, ReadData[9]);
+   D_flip_flop r10(WriteData[10], CLK, ReadData[10]);
+   D_flip_flop r11(WriteData[11], CLK, ReadData[11]);
+   D_flip_flop r12(WriteData[12], CLK, ReadData[12]);
+   D_flip_flop r13(WriteData[13], CLK, ReadData[13]);
+   D_flip_flop r14(WriteData[14], CLK, ReadData[14]);
+   D_flip_flop r15(WriteData[15], CLK, ReadData[15]);
+endmodule
 
 module D_flip_flop(D,CLK,Q);
    input D,CLK;
@@ -58,8 +83,101 @@ module D_latch(D,C,Q);
    not  not1  (D1,D);
 endmodule
 
-// Code at bottom
-//
+module mux4x1_16(i0, i1, i2, i3, s,result);
+	input [15:0] i0, i1, i2, i3;
+	input [1:0] s;
+    	output [15:0] result;
+	wire [15:0] temp0, temp1, temp2, temp3;
+	wire [1:0] sNot;
+
+	not n0(sNot[0], s[0]);
+	not n1(sNot[1], s[1]);
+
+	and a0(temp0[0],  i0[0],  sNot[0], sNot[1]);
+	and a1(temp0[1],  i0[1],  sNot[0], sNot[1]);
+	and a2(temp0[2],  i0[2],  sNot[0], sNot[1]);
+	and a3(temp0[3],  i0[3],  sNot[0], sNot[1]);
+	and a4(temp0[4],  i0[4],  sNot[0], sNot[1]);
+	and a5(temp0[5],  i0[5],  sNot[0], sNot[1]);
+	and a6(temp0[6],  i0[6],  sNot[0], sNot[1]);
+	and a7(temp0[7],  i0[7],  sNot[0], sNot[1]);
+	and a8(temp0[8],  i0[8],  sNot[0], sNot[1]);
+	and a9(temp0[9],  i0[9],  sNot[0], sNot[1]);
+	and a10(temp0[10],  i0[10],  sNot[0], sNot[1]);
+	and a11(temp0[11],  i0[11],  sNot[0], sNot[1]);
+	and a12(temp0[12],  i0[12],  sNot[0], sNot[1]);
+	and a13(temp0[13],  i0[13],  sNot[0], sNot[1]);
+	and a14(temp0[14],  i0[14],  sNot[0], sNot[1]);
+	and a15(temp0[15],  i0[15],  sNot[0], sNot[1]);
+
+	and a16(temp1[0],  i1[0],  sNot[0], s[1]);
+	and a17(temp1[1],  i1[1],  sNot[0], s[1]);
+	and a18(temp1[2],  i1[2],  sNot[0], s[1]);
+	and a19(temp1[3],  i1[3],  sNot[0], s[1]);
+	and a20(temp1[4],  i1[4],  sNot[0], s[1]);
+	and a21(temp1[5],  i1[5],  sNot[0], s[1]);
+	and a22(temp1[6],  i1[6],  sNot[0], s[1]);
+	and a23(temp1[7],  i1[7],  sNot[0], s[1]);
+	and a24(temp1[8],  i1[8],  sNot[0], s[1]);
+	and a25(temp1[9],  i1[9],  sNot[0], s[1]);
+	and a26(temp1[10],  i1[10],  sNot[0], s[1]);
+	and a27(temp1[11],  i1[11],  sNot[0], s[1]);
+	and a28(temp1[12],  i1[12],  sNot[0], s[1]);
+	and a29(temp1[13],  i1[13],  sNot[0], s[1]);
+	and a30(temp1[14],  i1[14],  sNot[0], s[1]);
+	and a31(temp1[15],  i1[15],  sNot[0], s[1]);
+
+	and a32(temp2[0],  i2[0],  s[0], sNot[1]);
+	and a33(temp2[1],  i2[1],  s[0], sNot[1]);
+	and a34(temp2[2],  i2[2],  s[0], sNot[1]);
+	and a35(temp2[3],  i2[3],  s[0], sNot[1]);
+	and a36(temp2[4],  i2[4],  s[0], sNot[1]);
+	and a37(temp2[5],  i2[5],  s[0], sNot[1]);
+	and a38(temp2[6],  i2[6],  s[0], sNot[1]);
+	and a39(temp2[7],  i2[7],  s[0], sNot[1]);
+	and a40(temp2[8],  i2[8],  s[0], sNot[1]);
+	and a41(temp2[9],  i2[9],  s[0], sNot[1]);
+	and a42(temp2[10],  i2[10],  s[0], sNot[1]);
+	and a43(temp2[11],  i2[11],  s[0], sNot[1]);
+	and a44(temp2[12],  i2[12],  s[0], sNot[1]);
+	and a45(temp2[13],  i2[13],  s[0], sNot[1]);
+	and a46(temp2[14],  i2[14],  s[0], sNot[1]);
+	and a47(temp2[15],  i2[15],  s[0], sNot[1]);
+
+	and a48(temp3[0],  i3[0],  s[0], s[1]);
+	and a49(temp3[1],  i3[1],  s[0], s[1]);
+	and a50(temp3[2],  i3[2],  s[0], s[1]);
+	and a51(temp3[3],  i3[3],  s[0], s[1]);
+	and a52(temp3[4],  i3[4],  s[0], s[1]);
+	and a53(temp3[5],  i3[5],  s[0], s[1]);
+	and a54(temp3[6],  i3[6],  s[0], s[1]);
+	and a55(temp3[7],  i3[7],  s[0], s[1]);
+	and a56(temp3[8],  i3[8],  s[0], s[1]);
+	and a57(temp3[9],  i3[9],  s[0], s[1]);
+	and a58(temp3[10],  i3[10],  s[0], s[1]);
+	and a59(temp3[11],  i3[11],  s[0], s[1]);
+	and a60(temp3[12],  i3[12],  s[0], s[1]);
+	and a61(temp3[13],  i3[13],  s[0], s[1]);
+	and a62(temp3[14],  i3[14],  s[0], s[1]);
+	and a63(temp3[15],  i3[15],  s[0], s[1]);
+  	or o0(result[0], temp0[0], temp1[0], temp2[0], temp3[0]);
+  	or o1(result[1], temp0[1], temp1[1], temp2[1], temp3[1]);
+  	or o2(result[2], temp0[2], temp1[2], temp2[2], temp3[2]);
+  	or o3(result[3], temp0[3], temp1[3], temp2[3], temp3[3]);
+  	or o4(result[4], temp0[4], temp1[4], temp2[4], temp3[4]);
+  	or o5(result[5], temp0[5], temp1[5], temp2[5], temp3[5]);
+  	or o6(result[6], temp0[6], temp1[6], temp2[6], temp3[6]);
+  	or o7(result[7], temp0[7], temp1[7], temp2[7], temp3[7]);
+  	or o8(result[8], temp0[8], temp1[8], temp2[8], temp3[8]);
+  	or o9(result[9], temp0[9], temp1[9], temp2[9], temp3[9]);
+  	or o10(result[10], temp0[10], temp1[10], temp2[10], temp3[10]);
+  	or o11(result[11], temp0[11], temp1[11], temp2[11], temp3[11]);
+  	or o12(result[12], temp0[12], temp1[12], temp2[12], temp3[12]);
+  	or o13(result[13], temp0[13], temp1[13], temp2[13], temp3[13]);
+  	or o14(result[14], temp0[14], temp1[14], temp2[14], temp3[14]);
+  	or o15(result[15], temp0[15], temp1[15], temp2[15], temp3[15]);
+endmodule
+
 // module mux4x1(i0,i1,i2,i3,select,y);
 //    input i0,i1,i2,i3;
 //    input [1:0] select;
@@ -85,6 +203,63 @@ module decoder (S1,S0,D3,D2,D1,D0);
        a1 (D1,notS1,   S0),
        a2 (D2,   S1,notS0),
        a3 (D3,   S1,   S0);
+endmodule
+
+module sixteenMux2x1(a, b, s, result);
+	output [15:0] result;
+	input [15:0] a, b;
+	input s;
+	wire nots;
+	wire [15:0] temp1, temp2;
+	not n0(nots, s);
+	and g0(temp1[0], a[0], nots),
+	    g1(temp1[1], a[1], nots),
+	    g2(temp1[2], a[2], nots),
+	    g3(temp1[3], a[3], nots),
+	    g4(temp1[4], a[4], nots),
+	    g5(temp1[5], a[5], nots),
+	    g6(temp1[6], a[6], nots),
+	    g7(temp1[7], a[7], nots),
+	    g8(temp1[8], a[8], nots),
+	    g9(temp1[9], a[9], nots),
+	    g10(temp1[10], a[10], nots),
+	    g11(temp1[11], a[11], nots),
+	    g12(temp1[12], a[12], nots),
+	    g13(temp1[13], a[13], nots),
+	    g14(temp1[14], a[14], nots),
+	    g15(temp1[15], a[15], nots),
+	    g16(temp2[0], b[0], s),
+	    g17(temp2[1], b[1], s),
+	    g18(temp2[2], b[2], s),
+	    g19(temp2[3], b[3], s),
+	    g20(temp2[4], b[4], s),
+	    g21(temp2[5], b[5], s),
+	    g22(temp2[6], b[6], s),
+	    g23(temp2[7], b[7], s),
+	    g24(temp2[8], b[8], s),
+	    g25(temp2[9], b[9], s),
+	    g26(temp2[10], b[10], s),
+	    g27(temp2[11], b[11], s),
+	    g28(temp2[12], b[12], s),
+	    g29(temp2[13], b[13], s),
+	    g30(temp2[14], b[14], s),
+	    g31(temp2[15], b[15], s);
+	 or g32(result[0], temp1[0], temp2[0]),
+	    g33(result[1], temp1[1], temp2[1]),
+	    g34(result[2], temp1[2], temp2[2]),
+	    g35(result[3], temp1[3], temp2[3]),
+	    g36(result[4], temp1[4], temp2[4]),
+	    g37(result[5], temp1[5], temp2[5]),
+	    g38(result[6], temp1[6], temp2[6]),
+	    g39(result[7], temp1[7], temp2[7]),
+	    g40(result[8], temp1[8], temp2[8]),
+	    g41(result[9], temp1[9], temp2[9]),
+	    g42(result[10], temp1[10], temp2[10]),
+	    g43(result[11], temp1[11], temp2[11]),
+	    g44(result[12], temp1[12], temp2[12]),
+	    g45(result[13], temp1[13], temp2[13]),
+	    g46(result[14], temp1[14], temp2[14]),
+	    g47(result[15], temp1[15], temp2[15]);
 endmodule
 
 module ALU (op,a,b,result,zero);
@@ -175,38 +350,77 @@ module fulladder (S,C,x,y,z);
 endmodule
 
 
+// module mux2x1(A,B,select,OUT);
+//    input A,B,select;
+//    output OUT;
+//    reg OUT;
+//   //  always @ (select or A or B)
+//   //        if (select == 0) OUT = A;
+//   //        else OUT = B;
+//   nand g1 (w1, A, select),
+//        g2 (w2, select, select),
+//        g3 (w3, w2, B),
+//        g4 (OUT, w1, w3);
+// endmodule
+
 module mux2x1(A,B,select,OUT);
    input A,B,select;
    output OUT;
    reg OUT;
-  //  always @ (select or A or B)
-  //        if (select == 0) OUT = A;
-  //        else OUT = B;
-  nand g1 (w1, A, select),
-       g2 (w2, select, select),
-       g3 (w3, w2, B),
-       g4 (OUT, w1, w3);
+   always @ (select or A or B)
+         if (select == 0) OUT = A;
+         else OUT = B;
 endmodule
+
+
+module mux2x1_2(i0, i1, s,result);
+	output [1:0] result;
+	input [1:0] i0, i1;
+	input s;
+	wire sNot;
+	wire [1:0] temp0, temp1;
+	not n0(sNot, s);
+	and a0(temp0[0], i0[0], sNot);
+	and a1(temp0[1], i0[1], sNot);
+	and a2(temp1[0], i1[0], s);
+	and a3(temp1[1], i1[1], s);
+	or o0(result[0], temp0[0], temp1[0]);
+	or o0(result[1], temp0[1], temp1[1]);
+endmodule
+
+// module mux4x1(i0,i1,i2,i3,select,y);
+//    input i0,i1,i2,i3;
+//    input [1:0] select;
+//    output y;
+//    reg y;
+//   //  always @ (i0 or i1 or i2 or i3 or select)
+//   //           case (select)
+//   //              2'b00: y = i0;
+//   //              2'b01: y = i1;
+//   //              2'b10: y = i2;
+//   //              2'b11: y = i3;
+//   //           endcase
+//   not g1 (x0, select[0]),
+//       g2 (x1, select[1]);
+//   and g3 (w1, i0, x0, x1),
+//       g4 (w2, i1, select[0], x1),
+//       g5 (w3, i2, select[1], x0),
+//       g6 (w4, i3, select[1], select[0]);
+//   or  g7 (y, w1, w2, w3, w4);
+// endmodule
 
 module mux4x1(i0,i1,i2,i3,select,y);
    input i0,i1,i2,i3;
    input [1:0] select;
    output y;
    reg y;
-  //  always @ (i0 or i1 or i2 or i3 or select)
-  //           case (select)
-  //              2'b00: y = i0;
-  //              2'b01: y = i1;
-  //              2'b10: y = i2;
-  //              2'b11: y = i3;
-  //           endcase
-  not g1 (x0, select[0]),
-      g2 (x1, select[1]);
-  and g3 (w1, i0, x0, x1),
-      g4 (w2, i1, select[0], x1),
-      g5 (w3, i2, select[1], x0),
-      g6 (w4, i3, select[1], select[0]);
-  or  g7 (y, w1, w2, w3, w4);
+   always @ (i0 or i1 or i2 or i3 or select)
+            case (select)
+               2'b00: y = i0;
+               2'b01: y = i1;
+               2'b10: y = i2;
+               2'b11: y = i3;
+            endcase
 endmodule
 
 module MainControl (Op,Control);
@@ -277,11 +491,12 @@ module CPU (clock,ALUOut,Instruction);
   output [15:0] ALUOut,IR;
   reg[15:0] PC;
   reg[15:0] IMemory; //[0:1023];
-  wire [15:0] IR,NextPC,A,B,ALUOut,RD2,SignExtend;
+  wire [15:0] IR,NextPC,A,B,ALUOut,RD2,SignExtend, ALUmux, immediate;
   wire [2:0] ALUctl;
   wire [1:0] ALUOp;
-  wire [4:0] WR;
-  wire [1;0] WriteRegister;
+  // wire [4:0] WR;
+  wire [1:0] WR;
+  wire [1:0] WriteRegister;
   wire [5:0] control;
   wire zero;
 
@@ -302,20 +517,20 @@ module CPU (clock,ALUOut,Instruction);
   instr_reg instr(Instruction, IR, clock);
 
   // assign WR = (RegDst) ? IR[15:11]: IR[20:16]; // RegDst Mux
-  mux2x1 mux1(IR[9:8],IR[7,6],control[5],WriteRegister);
+  mux2x1_2 mux1(IR[9:8],IR[7:6],control[5],WR);
 
   // assign B  = (ALUSrc) ? SignExtend: RD2; // ALUSrc Mux
-
+  sixteenMux2x1 aluMux(RD2,immediate, control[4], ALUmux);
 
   // assign SignExtend = {{16{IR[15]}},IR[15:0]}; // sign extension unit
   signextend signex(IR[7:0],immediate);
 
   reg_file rf (IR[11:10],IR[9:8],WR,ALUOut,control[3],A,RD2,clock);
 
-  alu fetch (3'b010,PC,4,NextPC,Unused);
+  ALU fetch (3'b010,PC,4,NextPC,Unused);
 
   // alu ex (ALUctl, A, B, ALUOut, Zero);
-  alu ex (control[2:0],A, ,ALUOut,zero)
+  ALU ex (control[2:0],A, ALUmux, ALUOut, zero);
 
   // MainControl MainCtr (IR[15:12],{RegDst,ALUSrc,MemtoReg,RegWrite,MemWrite,Branch,ALUOp});
   MainControl ctr(IR[15:12],control);
@@ -341,8 +556,9 @@ module test ();
   always #1 clock = ~clock;
 
   initial begin
-    $display ("time clock IR       WD");
-    $monitor ("%2d   %b     %h %h", $time,clock,IR,WD);
+    // $display ("time clock IR       WD");
+    // $monitor ("%2d   %b     %h %h", $time,clock,IR,WD);
+     $monitor ("%2d   %b     %b %b %d", $time,clock,IMemory,WD,WD);
     clock = 1;
    #2 IMemory = 16'b0100000100001111;// addi $t1, $0,  15   ($t1=15)
    #2 IMemory = 16'b0100001000000111;  // addi $t2, $0,  7    ($t2= 7)
@@ -353,7 +569,6 @@ module test ();
    #2 IMemory = 16'b0111111001000000;  // slt  $t1, $t3, $t2  ($t1= 0)
    #2 IMemory = 16'b0111101101000000;  // slt  $t1, $t2, $t3  ($t1= 1)
 
-    #12 $finish;
+    #1 $finish;
   end
-
 endmodule
