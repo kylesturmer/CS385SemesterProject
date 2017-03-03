@@ -1,9 +1,7 @@
-// File for our code
+// Semester Project part 1
 //
-// 4-bit MIPS ALU in Verilog
-//
-// We need to:
-// redesign mux's at gate-level and extend it to 16 bit
+// By: Kyle Sturmer &
+// Scott Perretta
 
 module reg_file (rr1,rr2,wr,wd,regwrite,rd1,rd2,clock);
 
@@ -21,11 +19,8 @@ module reg_file (rr1,rr2,wr,wd,regwrite,rd1,rd2,clock);
 
 // output port
 
-   // mux4x1 mux1 (0,q1,q2,q3,rr1,rd1),
-        //   mux2 (0,q1,q2,q3,rr2,rd2);
   mux4x1_16 mux1 (16'b0000000000000000,q1,q2,q3,rr1,rd1),
             mux2 (16'b0000000000000000,q1,q2,q3,rr2,rd2);
-
 
 // input port
 
@@ -92,7 +87,6 @@ module mux4x1_16(i0, i1, i2, i3, s,result);
 
 	not n0(sNot[0], s[0]);
 	not n1(sNot[1], s[1]);
-
 	and a0(temp0[0],  i0[0],  sNot[0], sNot[1]);
 	and a1(temp0[1],  i0[1],  sNot[0], sNot[1]);
 	and a2(temp0[2],  i0[2],  sNot[0], sNot[1]);
@@ -109,7 +103,6 @@ module mux4x1_16(i0, i1, i2, i3, s,result);
 	and a13(temp0[13],  i0[13],  sNot[0], sNot[1]);
 	and a14(temp0[14],  i0[14],  sNot[0], sNot[1]);
 	and a15(temp0[15],  i0[15],  sNot[0], sNot[1]);
-
 	and a16(temp1[0],  i1[0],  sNot[0], s[1]);
 	and a17(temp1[1],  i1[1],  sNot[0], s[1]);
 	and a18(temp1[2],  i1[2],  sNot[0], s[1]);
@@ -126,7 +119,6 @@ module mux4x1_16(i0, i1, i2, i3, s,result);
 	and a29(temp1[13],  i1[13],  sNot[0], s[1]);
 	and a30(temp1[14],  i1[14],  sNot[0], s[1]);
 	and a31(temp1[15],  i1[15],  sNot[0], s[1]);
-
 	and a32(temp2[0],  i2[0],  s[0], sNot[1]);
 	and a33(temp2[1],  i2[1],  s[0], sNot[1]);
 	and a34(temp2[2],  i2[2],  s[0], sNot[1]);
@@ -143,7 +135,6 @@ module mux4x1_16(i0, i1, i2, i3, s,result);
 	and a45(temp2[13],  i2[13],  s[0], sNot[1]);
 	and a46(temp2[14],  i2[14],  s[0], sNot[1]);
 	and a47(temp2[15],  i2[15],  s[0], sNot[1]);
-
 	and a48(temp3[0],  i3[0],  s[0], s[1]);
 	and a49(temp3[1],  i3[1],  s[0], s[1]);
 	and a50(temp3[2],  i3[2],  s[0], s[1]);
@@ -160,49 +151,34 @@ module mux4x1_16(i0, i1, i2, i3, s,result);
 	and a61(temp3[13],  i3[13],  s[0], s[1]);
 	and a62(temp3[14],  i3[14],  s[0], s[1]);
 	and a63(temp3[15],  i3[15],  s[0], s[1]);
-  	or o0(result[0], temp0[0], temp1[0], temp2[0], temp3[0]);
-  	or o1(result[1], temp0[1], temp1[1], temp2[1], temp3[1]);
-  	or o2(result[2], temp0[2], temp1[2], temp2[2], temp3[2]);
-  	or o3(result[3], temp0[3], temp1[3], temp2[3], temp3[3]);
-  	or o4(result[4], temp0[4], temp1[4], temp2[4], temp3[4]);
-  	or o5(result[5], temp0[5], temp1[5], temp2[5], temp3[5]);
-  	or o6(result[6], temp0[6], temp1[6], temp2[6], temp3[6]);
-  	or o7(result[7], temp0[7], temp1[7], temp2[7], temp3[7]);
-  	or o8(result[8], temp0[8], temp1[8], temp2[8], temp3[8]);
-  	or o9(result[9], temp0[9], temp1[9], temp2[9], temp3[9]);
-  	or o10(result[10], temp0[10], temp1[10], temp2[10], temp3[10]);
-  	or o11(result[11], temp0[11], temp1[11], temp2[11], temp3[11]);
-  	or o12(result[12], temp0[12], temp1[12], temp2[12], temp3[12]);
-  	or o13(result[13], temp0[13], temp1[13], temp2[13], temp3[13]);
-  	or o14(result[14], temp0[14], temp1[14], temp2[14], temp3[14]);
-  	or o15(result[15], temp0[15], temp1[15], temp2[15], temp3[15]);
+  or o0(result[0], temp0[0], temp1[0], temp2[0], temp3[0]);
+  or o1(result[1], temp0[1], temp1[1], temp2[1], temp3[1]);
+  or o2(result[2], temp0[2], temp1[2], temp2[2], temp3[2]);
+  or o3(result[3], temp0[3], temp1[3], temp2[3], temp3[3]);
+	or o4(result[4], temp0[4], temp1[4], temp2[4], temp3[4]);
+  or o5(result[5], temp0[5], temp1[5], temp2[5], temp3[5]);
+  or o6(result[6], temp0[6], temp1[6], temp2[6], temp3[6]);
+	or o7(result[7], temp0[7], temp1[7], temp2[7], temp3[7]);
+	or o8(result[8], temp0[8], temp1[8], temp2[8], temp3[8]);
+	or o9(result[9], temp0[9], temp1[9], temp2[9], temp3[9]);
+	or o10(result[10], temp0[10], temp1[10], temp2[10], temp3[10]);
+	or o11(result[11], temp0[11], temp1[11], temp2[11], temp3[11]);
+	or o12(result[12], temp0[12], temp1[12], temp2[12], temp3[12]);
+	or o13(result[13], temp0[13], temp1[13], temp2[13], temp3[13]);
+	or o14(result[14], temp0[14], temp1[14], temp2[14], temp3[14]);
+	or o15(result[15], temp0[15], temp1[15], temp2[15], temp3[15]);
 endmodule
-
-// module mux4x1(i0,i1,i2,i3,select,y);
-//    input i0,i1,i2,i3;
-//    input [1:0] select;
-//    output y;
-//    reg y;
-//    always @ (i0 or i1 or i2 or i3 or select)
-//             case (select)
-//                2'b00: y = i0;
-//                2'b01: y = i1;
-//                2'b10: y = i2;
-//                2'b11: y = i3;
-//             endcase
-// endmodule
 
 module decoder (S1,S0,D3,D2,D1,D0);
    input S0,S1;
    output D0,D1,D2,D3;
 
-   not n1 (notS0,S0),
-       n2 (notS1,S1);
-
-   and a0 (D0,notS1,notS0),
-       a1 (D1,notS1,   S0),
-       a2 (D2,   S1,notS0),
-       a3 (D3,   S1,   S0);
+   not g1 (notS0,S0),
+       g2 (notS1,S1);
+   and g3 (D0,notS1,notS0),
+       g4 (D1,notS1,   S0),
+       g5 (D2,   S1,notS0),
+       g6 (D3,   S1,   S0);
 endmodule
 
 module sixteenMux2x1(a, b, s, result);
@@ -290,9 +266,7 @@ module ALU (op,a,b,result,zero);
    or or1(or01, result[0],result[1]);
    or or2(or23, result[2],result[3]);
    nor nor1(zero,or01,or23);
-
 endmodule
-
 
 // 1-bit ALU for bits 0-15
 
@@ -308,9 +282,7 @@ module ALU1 (a,b,binvert,op,less,carryin,carryout,result);
    or or1(a_or_b, a, b);
    fulladder adder1(sum,carryout,a,b1,carryin);
    mux4x1 mux2(a_and_b,a_or_b,sum,less,op[1:0],result);
-
 endmodule
-
 
 // 1-bit ALU for the most significant bit
 
@@ -326,9 +298,7 @@ module ALUmsb (a,b,binvert,op,less,carryin,carryout,result,sum);
    or or1(a_or_b, a, b);
    fulladder adder1(sum,carryout,a,b1,carryin);
    mux4x1 mux2(a_and_b,a_or_b,sum,less,op[1:0],result);
-
 endmodule
-
 
 module halfadder (S,C,x,y);
    input x,y;
@@ -349,20 +319,6 @@ module fulladder (S,C,x,y,z);
    or g1(C,D2,D1);
 endmodule
 
-
-// module mux2x1(A,B,select,OUT);
-//    input A,B,select;
-//    output OUT;
-//    reg OUT;
-//   //  always @ (select or A or B)
-//   //        if (select == 0) OUT = A;
-//   //        else OUT = B;
-//   nand g1 (w1, A, select),
-//        g2 (w2, select, select),
-//        g3 (w3, w2, B),
-//        g4 (OUT, w1, w3);
-// endmodule
-
 module mux2x1(A,B,select,OUT);
    input A,B,select;
    output OUT;
@@ -371,7 +327,6 @@ module mux2x1(A,B,select,OUT);
          if (select == 0) OUT = A;
          else OUT = B;
 endmodule
-
 
 module mux2x1_2(i0, i1, s,result);
 	output [1:0] result;
@@ -388,27 +343,6 @@ module mux2x1_2(i0, i1, s,result);
 	or o0(result[1], temp0[1], temp1[1]);
 endmodule
 
-// module mux4x1(i0,i1,i2,i3,select,y);
-//    input i0,i1,i2,i3;
-//    input [1:0] select;
-//    output y;
-//    reg y;
-//   //  always @ (i0 or i1 or i2 or i3 or select)
-//   //           case (select)
-//   //              2'b00: y = i0;
-//   //              2'b01: y = i1;
-//   //              2'b10: y = i2;
-//   //              2'b11: y = i3;
-//   //           endcase
-//   not g1 (x0, select[0]),
-//       g2 (x1, select[1]);
-//   and g3 (w1, i0, x0, x1),
-//       g4 (w2, i1, select[0], x1),
-//       g5 (w3, i2, select[1], x0),
-//       g6 (w4, i3, select[1], select[0]);
-//   or  g7 (y, w1, w2, w3, w4);
-// endmodule
-
 module mux4x1(i0,i1,i2,i3,select,y);
    input i0,i1,i2,i3;
    input [1:0] select;
@@ -424,7 +358,6 @@ module mux4x1(i0,i1,i2,i3,select,y);
 endmodule
 
 module MainControl (Op,Control);
-
   input [3:0] Op;
   output reg [5:0] Control;
 
@@ -436,7 +369,6 @@ module MainControl (Op,Control);
     4'b0100: Control <=	6'b011010;	//addi
     4'b0111: Control <= 6'b101111;	//slt
   endcase
-
 endmodule
 
 module signextend(A,B);
@@ -481,7 +413,6 @@ module instr_reg (Instruction,IR,CLK);
    D_flip_flop r13(Instruction[13], CLK, IR[13]);
    D_flip_flop r14(Instruction[14], CLK, IR[14]);
    D_flip_flop r15(Instruction[15], CLK, IR[15]);
-
 endmodule
 
 module CPU (clock,ALUOut,Instruction);
@@ -494,22 +425,10 @@ module CPU (clock,ALUOut,Instruction);
   wire [15:0] IR,NextPC,A,B,ALUOut,RD2,SignExtend, ALUmux, immediate;
   wire [2:0] ALUctl;
   wire [1:0] ALUOp;
-  // wire [4:0] WR;
   wire [1:0] WR;
   wire [1:0] WriteRegister;
   wire [5:0] control;
   wire zero;
-
-// Test Program:
-  // initial begin
-  //   IMemory[0] = 32'h2009000f;  // addi $t1, $0,  15   ($t1=15)
-  //   IMemory[1] = 32'h200a0007;  // addi $t2, $0,  7    ($t2= 7)
-  //   IMemory[2] = 32'h012a5824;  // and  $t3, $t1, $t2  ($t3= 7)
-  //   IMemory[3] = 32'h012b5022;  // sub  $t2, $t1, $t3  ($t2= 8)
-  //   IMemory[4] = 32'h014b5025;  // or   $t2, $t2, $t3  ($t2=15)
-  //   IMemory[5] = 32'h016a482a;  // slt  $t1, $t3, $t2  ($t1= 1)
-  //   IMemory[6] = 32'h014b482a;  // slt  $t1, $t2, $t3  ($t1= 0)
-  // end
 
   initial PC = 0;
 
@@ -529,13 +448,11 @@ module CPU (clock,ALUOut,Instruction);
 
   ALU fetch (3'b010,PC,4,NextPC,Unused);
 
-  // alu ex (ALUctl, A, B, ALUOut, Zero);
   ALU ex (control[2:0],A, ALUmux, ALUOut, zero);
 
   // MainControl MainCtr (IR[15:12],{RegDst,ALUSrc,MemtoReg,RegWrite,MemWrite,Branch,ALUOp});
   MainControl ctr(IR[15:12],control);
 
-  // Do we need?
   // ALUControl ALUCtrl(ALUOp, IR[5:0], ALUctl); // ALU control unit
 
   always @(negedge clock) begin
@@ -556,9 +473,7 @@ module test ();
   always #1 clock = ~clock;
 
   initial begin
-    // $display ("time clock IR       WD");
-    // $monitor ("%2d   %b     %h %h", $time,clock,IR,WD);
-     $monitor ("%2d   %b     %b %b %d", $time,clock,IMemory,WD,WD);
+    $monitor ("%2d   %b     %b %b %d", $time,clock,IMemory,WD,WD);
     clock = 1;
    #2 IMemory = 16'b0100000100001111;// addi $t1, $0,  15   ($t1=15)
    #2 IMemory = 16'b0100001000000111;  // addi $t2, $0,  7    ($t2= 7)
@@ -569,6 +484,6 @@ module test ();
    #2 IMemory = 16'b0111111001000000;  // slt  $t1, $t3, $t2  ($t1= 0)
    #2 IMemory = 16'b0111101101000000;  // slt  $t1, $t2, $t3  ($t1= 1)
 
-    #1 $finish;
+  #1 $finish;
   end
 endmodule
