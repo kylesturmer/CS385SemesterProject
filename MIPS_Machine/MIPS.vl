@@ -281,6 +281,9 @@ module CPU (clock,ALUOut,Instruction);
   wire [2:0] ALUctl;
   wire [1:0] ALUOp;
   wire [4:0] WR;
+  wire [1;0] WriteRegister;
+  wire [5:0] control;
+  wire zero;
 
 // Test Program:
   // initial begin
@@ -298,22 +301,27 @@ module CPU (clock,ALUOut,Instruction);
   // assign IR = IMemory[PC>>2];
   instr_reg instr(Instruction, IR, clock);
 
-  assign WR = (RegDst) ? IR[15:11]: IR[20:16]; // RegDst Mux
+  // assign WR = (RegDst) ? IR[15:11]: IR[20:16]; // RegDst Mux
+  mux2x1 mux1(IR[9:8],IR[7,6],control[5],WriteRegister);
 
-  assign B  = (ALUSrc) ? SignExtend: RD2; // ALUSrc Mux
+  // assign B  = (ALUSrc) ? SignExtend: RD2; // ALUSrc Mux
+
 
   // assign SignExtend = {{16{IR[15]}},IR[15:0]}; // sign extension unit
   signextend signex(IR[7:0],immediate);
 
-  reg_file rf (IR[11:10],IR[9:8],WR,ALUOut,RegWrite,A,RD2,clock);
+  reg_file rf (IR[11:10],IR[9:8],WR,ALUOut,control[3],A,RD2,clock);
 
   alu fetch (3'b010,PC,4,NextPC,Unused);
 
-  alu ex (ALUctl, A, B, ALUOut, Zero);
+  // alu ex (ALUctl, A, B, ALUOut, Zero);
+  alu ex (control[2:0],A, ,ALUOut,zero)
 
-  MainControl MainCtr (IR[15:12],{RegDst,ALUSrc,MemtoReg,RegWrite,MemWrite,Branch,ALUOp});
+  // MainControl MainCtr (IR[15:12],{RegDst,ALUSrc,MemtoReg,RegWrite,MemWrite,Branch,ALUOp});
+  MainControl ctr(IR[15:12],control);
 
-  ALUControl ALUCtrl(ALUOp, IR[5:0], ALUctl); // ALU control unit
+  // Do we need?
+  // ALUControl ALUCtrl(ALUOp, IR[5:0], ALUctl); // ALU control unit
 
   always @(negedge clock) begin
     PC <= NextPC;
@@ -325,9 +333,10 @@ endmodule
 module test ();
 
   reg clock;
+  reg [15:0] IMemory;
   wire [15:0] WD,IR;
 
-  CPU test_cpu(clock,WD,IR);
+  CPU test_cpu(clock,WD,IMemory);
 
   always #1 clock = ~clock;
 
